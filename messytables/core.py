@@ -1,7 +1,7 @@
 from messytables.util import OrderedDict
 from collections import Mapping
 from messytables.error import TableError, NoSuchPropertyError
-import cStringIO
+import io
 
 def seekable_stream(fileobj):
     try:
@@ -19,7 +19,7 @@ class BufferedFile(object):
     a stream up to buffer_size
     '''
     def __init__(self, fp, buffer_size=2048):
-        self.data = cStringIO.StringIO()
+        self.data = io.StringIO()
         self.fp = fp
         self.offset = 0
         self.len = 0
@@ -30,7 +30,7 @@ class BufferedFile(object):
         try:
             return self.fp.readline()
         except AttributeError:
-            return self.fp.next()
+            return next(self.fp)
 
     def _read(self, n):
         return self.fp.read(n)
@@ -133,8 +133,8 @@ class Cell(object):
         if self.value is None:
             return True
         value = self.value
-        if not isinstance(value, basestring):
-            value = unicode(value)
+        if not isinstance(value, str):
+            value = str(value)
         if len(value.strip()):
             return False
         return True

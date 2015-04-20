@@ -45,7 +45,7 @@ class XLSTableSet(TableSet):
                     formatting_info=with_formatting_info)
             except XLRDError as e:
                 _, value, traceback = sys.exc_info()
-                raise ReadError, "Can't read Excel file: %r" % value, traceback
+                raise ReadError("Can't read Excel file: %r" % value).with_traceback(traceback)
         '''Initilize the tableset.
 
         :param encoding: passed on to xlrd.open_workbook function
@@ -100,7 +100,7 @@ class XLSRowSet(RowSet):
         converted according to the excel data types specified, including
         conversion of excel dates, which are notoriously buggy. """
         num_rows = self.sheet.nrows
-        for rownum in xrange(min(self.window, num_rows) if sample else num_rows):
+        for rownum in range(min(self.window, num_rows) if sample else num_rows):
             row = []
             for colnum, cell in enumerate(self.sheet.row(rownum)):
                 try:

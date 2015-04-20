@@ -116,8 +116,8 @@ class HTMLRowSet(RowSet):
                 rowspan = html_cell.properties['rowspan']
                 colspan = html_cell.properties['colspan']
 
-                x_range = range(output_column, output_column + colspan)
-                y_range = range(r, r + rowspan)
+                x_range = list(range(output_column, output_column + colspan))
+                y_range = list(range(r, r + rowspan))
                 for x in x_range:
                     for y in y_range:
                         if (output_column, r) != (x, y):

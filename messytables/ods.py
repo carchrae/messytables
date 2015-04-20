@@ -1,4 +1,4 @@
-import cStringIO
+import io
 import re
 import zipfile
 
@@ -19,22 +19,22 @@ ODS_TYPES = {
 }
 
 NAMESPACES = {
-    "dc": u"http://purl.org/dc/elements/1.1/",
-    "draw": u"urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",
-    "number": u"urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0",
-    "office": u"urn:oasis:names:tc:opendocument:xmlns:office:1.0",
-    "svg": u"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0",
-    "table": u"urn:oasis:names:tc:opendocument:xmlns:table:1.0",
-    "text": u"urn:oasis:names:tc:opendocument:xmlns:text:1.0",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "draw": "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",
+    "number": "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0",
+    "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
+    "svg": "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0",
+    "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
+    "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
 }
 
 # We must wrap the XML fragments in a valid header otherwise iterparse will
 # explode with certain (undefined) versions of libxml2.
 
-ODS_HEADER = u"<wrapper {0}>"\
+ODS_HEADER = "<wrapper {0}>"\
     .format(" ".join( 'xmlns:{0}="{1}"'.format(k,v)
-            for k,v in NAMESPACES.iteritems()))
-ODS_FOOTER = u"</wrapper>"
+            for k,v in NAMESPACES.items()))
+ODS_FOOTER = "</wrapper>"
 
 
 class ODSTableSet(TableSet):
@@ -63,7 +63,7 @@ class ODSTableSet(TableSet):
             # wrap in a StringIO so we do not have hassle with seeks and
             # binary etc (see notes to __init__ above)
             # TODO: rather wasteful if in fact fileobj comes from disk
-            fileobj = cStringIO.StringIO(fileobj.read())
+            fileobj = io.StringIO(fileobj.read())
 
         self.window = window
 
@@ -108,7 +108,7 @@ class ODSRowSet(RowSet):
             row_data = []
 
             block = "{0}{1}{2}".format(ODS_HEADER, row, ODS_FOOTER)
-            partial = cStringIO.StringIO(block)
+            partial = io.StringIO(block)
 
             for action, elem in etree.iterparse(partial, ('end',)):
                 if elem.tag == '{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-cell':

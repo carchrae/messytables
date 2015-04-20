@@ -1,4 +1,4 @@
-from ilines import ilines
+from .ilines import ilines
 import csv
 import codecs
 import chardet
@@ -46,7 +46,7 @@ class UTF8Recoder:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         line = self.reader.readline()
         if not line or line == '\0':
             raise StopIteration
@@ -55,9 +55,9 @@ class UTF8Recoder:
 
 
 def to_unicode_or_bust(obj, encoding='utf-8'):
-    if isinstance(obj, basestring):
-        if not isinstance(obj, unicode):
-            obj = unicode(obj, encoding)
+    if isinstance(obj, str):
+        if not isinstance(obj, str):
+            obj = str(obj, encoding)
     return obj
 
 
@@ -111,8 +111,8 @@ class CSVRowSet(RowSet):
         self.lineterminator = lineterminator
         self.skipinitialspace = skipinitialspace
         try:
-            for i in xrange(self.window):
-                self._sample.append(self.lines.next())
+            for i in range(self.window):
+                self._sample.append(next(self.lines))
         except StopIteration:
             pass
         super(CSVRowSet, self).__init__()
@@ -161,10 +161,10 @@ class CSVRowSet(RowSet):
             for row in csv.reader(rows(),
                     dialect=self._dialect, **self._overrides):
                 yield [Cell(to_unicode_or_bust(c)) for c in row]
-        except csv.Error, err:
-            if 'newline inside string' in unicode(err) and sample:
+        except csv.Error as err:
+            if 'newline inside string' in str(err) and sample:
                 pass
-            elif 'line contains NULL byte' in unicode(err):
+            elif 'line contains NULL byte' in str(err):
                 pass
             else:
                 raise messytables.ReadError('Error reading CSV: %r', err)

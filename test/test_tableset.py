@@ -9,7 +9,7 @@ from messytables.error import TableError
 try:
     from nose.tools import assert_is_instance
 except ImportError:
-    from shim26 import assert_is_instance
+    from .shim26 import assert_is_instance
 
 
 class TestTableSet(unittest.TestCase):

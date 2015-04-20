@@ -18,4 +18,4 @@ class DateParserTest(unittest.TestCase):
 
 class CellReprTest(unittest.TestCase):
     def test_repr_ok(self):
-        repr(Cell(value=u"\xa0"))
+        repr(Cell(value="\xa0"))
