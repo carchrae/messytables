@@ -42,7 +42,7 @@ setup(
         'xlrd>=0.8.0',
         'python-magic==0.4.6',  # used for type guessing
         'chardet==2.1.1',
-        'python-dateutil>=1.5.0,<2.0.0',
+        'python-dateutil>=1.5.0',
         'json-table-schema',
         'lxml>=3.2',
         'requests',
