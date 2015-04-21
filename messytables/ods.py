@@ -63,7 +63,7 @@ class ODSTableSet(TableSet):
             # wrap in a StringIO so we do not have hassle with seeks and
             # binary etc (see notes to __init__ above)
             # TODO: rather wasteful if in fact fileobj comes from disk
-            fileobj = io.StringIO(fileobj.read())
+            fileobj = io.BytesIO(fileobj.read())
 
         self.window = window
 
@@ -81,7 +81,7 @@ class ODSTableSet(TableSet):
             2. SAX parse the file more than once
         """
         sheets = [m.groups(0)[0]
-                  for m in ODS_TABLE_MATCH.finditer(self.content)]
+                  for m in ODS_TABLE_MATCH.finditer(self.content.decode('utf-8'))]
         return [ODSRowSet(sheet, self.window) for sheet in sheets]
 
 
@@ -107,8 +107,8 @@ class ODSRowSet(RowSet):
         for row in rows:
             row_data = []
 
-            block = "{0}{1}{2}".format(ODS_HEADER, row, ODS_FOOTER)
-            partial = io.StringIO(block)
+            block = "{0}{1}{2}".format(ODS_HEADER, row, ODS_FOOTER).encode('utf-8')
+            partial = io.BytesIO(block)
 
             for action, elem in etree.iterparse(partial, ('end',)):
                 if elem.tag == '{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-cell':
