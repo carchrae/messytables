@@ -146,7 +146,7 @@ class TestHtmlProperties(unittest.TestCase):
     def test_real_cells_have_lxml_property(self):
         lxml_element = self.real_cell.properties['_lxml']
         assert_is_instance(lxml_element, lxml.etree._Element)
-        assert_equal('<td colspan="2">06</td>',
+        assert_equal(b'<td colspan="2">06</td>',
                      lxml.html.tostring(lxml_element))
 
     def test_real_cell_has_a_colspan(self):
@@ -158,8 +158,8 @@ class TestHtmlProperties(unittest.TestCase):
 
     def test_real_cells_have_html_property(self):
         html = self.real_cell.properties['html']
-        assert_is_instance(html, str)
-        assert_equal('<td colspan="2">06</td>', html)
+        assert_is_instance(html, bytes)
+        assert_equal(b'<td colspan="2">06</td>', html)
 
     def test_fake_cells_have_no_html_property(self):
         assert_raises(KeyError, lambda: self.fake_cell.properties['html'])
