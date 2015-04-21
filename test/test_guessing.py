@@ -14,7 +14,7 @@ from messytables import (CSVTableSet, type_guess, headers_guess,
 class TypeGuessTest(unittest.TestCase):
     @attr("slow")
     def test_type_guess(self):
-        csv_file = io.StringIO('''
+        csv_file = io.BytesIO(b'''
             1,   2012/2/12, 2,   02 October 2011,  yes,   1
             2,   2012/2/12, 2,   02 October 2011,  true,  1
             2.4, 2012/2/12, 1,   1 May 2011,       no,    0
@@ -31,7 +31,7 @@ class TypeGuessTest(unittest.TestCase):
     def test_type_guess_strict(self):
         import locale
         locale.setlocale(locale.LC_ALL, 'en_GB.UTF-8')
-        csv_file = io.StringIO('''
+        csv_file = io.BytesIO(b'''
             1,   2012/2/12, 2,      2,02 October 2011,"100.234354"
             2,   2012/2/12, 1.1,    0,1 May 2011,"100,000,000.12"
             foo, bar,       1500,   0,,"NaN"
@@ -45,7 +45,7 @@ class TypeGuessTest(unittest.TestCase):
             DecimalType()])
 
     def test_strict_guessing_handles_padding(self):
-        csv_file = io.StringIO('''
+        csv_file = io.BytesIO(b'''
             1,   , 2
             2,   , 1.1
             foo, , 1500''')
@@ -56,7 +56,7 @@ class TypeGuessTest(unittest.TestCase):
                      [StringType(), StringType(), DecimalType()])
 
     def test_non_strict_guessing_handles_padding(self):
-        csv_file = io.StringIO('''
+        csv_file = io.BytesIO(b'''
             1,   , 2.1
             2,   , 1.1
             foo, , 1500''')
@@ -67,7 +67,7 @@ class TypeGuessTest(unittest.TestCase):
                      [IntegerType(), StringType(), DecimalType()])
 
     def test_guessing_uses_first_in_case_of_tie(self):
-        csv_file = io.StringIO('''
+        csv_file = io.BytesIO(b'''
             2
             1.1
             1500''')
