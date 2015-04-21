@@ -19,7 +19,7 @@ class BufferedFile(object):
     a stream up to buffer_size
     '''
     def __init__(self, fp, buffer_size=2048):
-        self.data = io.StringIO()
+        self.data = io.BytesIO()
         self.fp = fp
         self.offset = 0
         self.len = 0

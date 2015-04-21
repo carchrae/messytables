@@ -34,7 +34,7 @@ class StreamInputTest(unittest.TestCase):
             content_type="application/csv")
         r = requests.get(url, stream=True)
         # no full support for non blocking version yet, use urllib2
-        fh = io.StringIO(r.raw.read())
+        fh = io.BytesIO(r.raw.read())
         table_set = CSVTableSet(fh, encoding='utf-8')
         row_set = table_set.tables[0]
         data = list(row_set)
