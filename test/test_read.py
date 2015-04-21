@@ -368,7 +368,7 @@ class ReadXlsTest(unittest.TestCase):
         try:
             XLSTableSet(fh)
         except ReadError as e:
-            assert e.message == errmsg
+            assert e.args[0] == errmsg
         else:
             assert False, "Did not raise Read Error"
 
