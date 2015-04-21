@@ -167,4 +167,4 @@ class CSVRowSet(RowSet):
             elif 'line contains NULL byte' in str(err):
                 pass
             else:
-                raise messytables.ReadError('Error reading CSV: %r', err)
+                raise messytables.ReadError('Error reading CSV: %r, %r', err, list(rows())[0][:100])
