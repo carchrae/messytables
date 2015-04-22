@@ -1,4 +1,3 @@
-from .ilines import ilines
 import csv
 import codecs
 import chardet
@@ -102,7 +101,10 @@ class CSVRowSet(RowSet):
         self.name = name
         seekable_fileobj = messytables.seekable_stream(fileobj)
         self.fileobj = UTF8Recoder(seekable_fileobj, encoding)
-        self.lines = ilines(self.fileobj)
+        def fake_ilines(fake_fileobj):
+            for row in fake_fileobj:
+                yield row.decode('utf-8')
+        self.lines = fake_ilines(self.fileobj)
         self._sample = []
         self.delimiter = delimiter
         self.quotechar = quotechar
