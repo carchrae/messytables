@@ -527,8 +527,8 @@ class ReadHtmlTest(unittest.TestCase):
         assert_equal(['head', 'body', 'foot'], cell_values)
 
     def test_rowset_as_schema(self):
-        from io import StringIO as sio
-        ts = CSVTableSet(sio('''name,dob\nmk,2012-01-02\n'''))
+        from io import BytesIO as sio
+        ts = CSVTableSet(sio(b'''name,dob\nmk,2012-01-02\n'''))
         rs = ts.tables[0]
         jts = rowset_as_jts(rs).as_dict()
         assert_equal(jts['fields'], [
